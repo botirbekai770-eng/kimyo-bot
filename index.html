@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+<title>Sertifikat imtihon (RASH)</title>
+<script src="https://telegram.org/js/telegram-web-app.js"></script>
+<style>
+  :root{
+    --ink:#14213d; --ink2:#4a5578; --bg:#eef3fb; --card:#ffffff;
+    --violet:#5b4bdb; --violet2:#8b7cf6; --mint:#12b886; --mintbg:#e3f8ef;
+    --amber:#f08c00; --amberbg:#fff3df; --gray:#a3acc2; --graybg:#e7ebf3;
+    --line:#d8deeb;
+  }
+  *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+  body{font-family:-apple-system,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;
+       background:var(--bg);color:var(--ink);min-height:100vh;padding-bottom:90px}
+  /* ── Sarlavha ── */
+  .hero{position:relative;overflow:hidden;color:#fff;padding:22px 20px 26px;
+        background:linear-gradient(135deg,#3b2fb5 0%,#5b4bdb 55%,#7c6cf3 100%)}
+  .hero small{display:flex;align-items:center;gap:6px;font-size:12px;letter-spacing:.12em;
+              text-transform:uppercase;opacity:.8}
+  .hero h1{font-size:23px;margin-top:6px;font-weight:800}
+  .hero .flask{position:absolute;right:-8px;bottom:-14px;font-size:92px;opacity:.16;transform:rotate(-14deg)}
+  .hero .hex{position:absolute;right:70px;top:-26px;width:90px;height:90px;opacity:.12;
+             border:3px solid #fff;clip-path:polygon(25% 5%,75% 5%,100% 50%,75% 95%,25% 95%,0 50%)}
+  .wrap{padding:18px 16px}
+  .intro{background:var(--card);border-radius:16px;padding:14px 16px;font-size:14px;line-height:1.5;
+         color:var(--ink2);box-shadow:0 2px 10px rgba(20,33,61,.05);margin-top:-14px;position:relative}
+  .intro b{color:var(--ink)}
+  h2{font-size:18px;margin:20px 2px 12px;display:flex;align-items:center;gap:8px}
+  /* ── Mock kataklari (Mendeleyev jadvali uslubida) ── */
+  .grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+  @media (max-width:340px){.grid{grid-template-columns:repeat(2,1fr)}}
+  .el{position:relative;aspect-ratio:1/1.08;border-radius:14px;padding:9px 10px;background:var(--card);
+      border:2px solid var(--line);display:flex;flex-direction:column;justify-content:space-between;
+      cursor:pointer;transition:transform .12s}
+  .el:active{transform:scale(.96)}
+  .el .num{font-size:11px;font-weight:700;color:var(--ink2)}
+  .el .sym{font-size:30px;font-weight:900;letter-spacing:-.02em;line-height:1}
+  .el .nm{font-size:10.5px;font-weight:700;text-transform:uppercase;letter-spacing:.06em}
+  .el .ico{position:absolute;top:8px;right:9px;font-size:15px}
+  .el.o{border-color:#f7c873;background:linear-gradient(160deg,#fff 40%,var(--amberbg))}
+  .el.o .nm{color:var(--amber)}
+  .el.d{border-color:#8fe0c2;background:linear-gradient(160deg,#fff 40%,var(--mintbg))}
+  .el.d .nm{color:var(--mint)}
+  .el.s{background:var(--graybg);border-style:dashed;cursor:default;color:var(--gray)}
+  .el.s .num,.el.s .nm{color:var(--gray)}
+  .legend{display:flex;gap:14px;flex-wrap:wrap;margin-top:14px;font-size:12px;color:var(--ink2)}
+  .legend i{display:inline-block;width:10px;height:10px;border-radius:3px;margin-right:5px;vertical-align:-1px}
+  /* ── Javob varaqasi ── */
+  #sheet{display:none}
+  .bar{position:sticky;top:0;z-index:5;background:var(--bg);padding:12px 16px 10px;border-bottom:1px solid var(--line)}
+  .bar .row{display:flex;justify-content:space-between;align-items:center;font-size:14px;font-weight:700}
+  .prog{height:7px;border-radius:7px;background:var(--graybg);margin-top:8px;overflow:hidden}
+  .prog div{height:100%;width:0;background:linear-gradient(90deg,var(--violet),var(--violet2));transition:width .2s}
+  .pdf{display:flex;align-items:center;gap:10px;background:var(--card);border-radius:14px;padding:12px 14px;
+       margin:14px 0;font-size:14px;font-weight:600;color:var(--violet);text-decoration:none;border:1.5px solid #d9d4fb}
+  .sec{font-size:13px;font-weight:800;color:var(--ink2);text-transform:uppercase;letter-spacing:.08em;margin:18px 2px 8px}
+  .qs{background:var(--card);border-radius:16px;padding:4px 10px}
+  .q{display:flex;align-items:center;gap:8px;padding:9px 2px;border-bottom:1px solid #eef1f7}
+  .q:last-child{border-bottom:0}
+  .q .n{width:30px;font-weight:800;font-size:14px;color:var(--ink2);text-align:right}
+  .opts{display:flex;gap:6px;flex-wrap:wrap}
+  @media (max-width:360px){.b{width:32px;height:32px}}
+  .b{width:36px;height:36px;border-radius:10px;border:1.6px solid var(--line);background:#f8f9fd;
+     font-weight:800;font-size:14px;color:var(--ink2);display:flex;align-items:center;justify-content:center}
+  .b.on{background:var(--violet);border-color:var(--violet);color:#fff;box-shadow:0 3px 8px rgba(91,75,219,.35)}
+  .oq{background:var(--card);border-radius:16px;padding:12px 14px;margin-bottom:10px}
+  .oq .t{font-weight:800;margin-bottom:8px}
+  .oq label{display:flex;align-items:center;gap:8px;margin:6px 0;font-weight:700;color:var(--ink2)}
+  .oq input{flex:1;padding:10px 12px;border-radius:10px;border:1.6px solid var(--line);font-size:15px;
+            background:#f8f9fd;color:var(--ink);outline:none}
+  .oq input:focus{border-color:var(--violet)}
+  .fallback{position:fixed;left:16px;right:16px;bottom:16px;display:none;padding:15px;border:0;border-radius:14px;
+            background:var(--violet);color:#fff;font-size:16px;font-weight:800}
+  .empty{text-align:center;color:var(--ink2);padding:40px 10px}
+</style>
+</head>
+<body>
+
+<!-- 1-ekran: mock tanlash -->
+<div id="list">
+  <div class="hero">
+    <div class="hex"></div><div class="flask">⚗️</div>
+    <small>🧪 <span id="course">Kimyo Tayyorlov Kursi</span></small>
+    <h1 data-i="h1">Sertifikat imtihon (RASH)</h1>
+  </div>
+  <div class="wrap">
+    <div class="intro" data-i="intro">
+      Mockni tanlang, savollar faylini oching va javoblarni <b>varaqaga belgilang</b>.
+      «Yakunlash» bosilgach natija va <b>darajangiz</b> chatga keladi.
+      🎥 Tahlil videosi mockni topshirgandan so'ng ochiladi.
+    </div>
+    <h2 data-i="table">🔬 Mocklar jadvali</h2>
+    <div class="grid" id="grid"></div>
+    <div class="legend">
+      <span><i style="background:#f7c873"></i><b data-i="lo" style="font-weight:400">Ochiq</b></span>
+      <span><i style="background:#8fe0c2"></i><b data-i="ld" style="font-weight:400">Topshirilgan</b></span>
+      <span><i style="background:#c9d0df"></i><b data-i="ls" style="font-weight:400">Tez orada</b></span>
+    </div>
+  </div>
+</div>
+
+<!-- 2-ekran: javob varaqasi -->
+<div id="sheet">
+  <div class="bar">
+    <div class="row"><span id="stitle">Mock</span><span id="cnt">0 / 0</span></div>
+    <div class="prog"><div id="pbar"></div></div>
+  </div>
+  <div class="wrap">
+    <a class="pdf" id="pdf" href="#" style="display:none"><span data-i="pdf">📄 Savollar faylini ochish</span> <span style="margin-left:auto">↗</span></a>
+    <div class="sec" data-i="closed">Yopiq testlar</div>
+    <div class="qs" id="closed"></div>
+    <div id="openWrap">
+      <div class="sec" data-i="open">Ochiq savollar (javobni yozing)</div>
+      <div id="open"></div>
+    </div>
+  </div>
+  <button class="fallback" id="fb" data-i="fin">Yakunlash</button>
+</div>
+
+<script>
+const tg = window.Telegram ? Telegram.WebApp : null;
+if (tg) { tg.ready(); tg.expand(); try{tg.setHeaderColor('#3b2fb5');tg.setBackgroundColor('#eef3fb');}catch(e){} }
+
+// Bot URL orqali yuborgan ma'lumot: ?d=<base64>
+function decode(){
+  try{
+    let s = new URLSearchParams(location.search).get('d') || '';
+    s = s.replace(/-/g,'+').replace(/_/g,'/'); while (s.length % 4) s += '=';
+    const bin = atob(s); const bytes = new Uint8Array([...bin].map(c=>c.charCodeAt(0)));
+    return JSON.parse(new TextDecoder().decode(bytes));
+  }catch(e){ return null; }
+}
+const DATA = decode() || {t:'Kimyo Tayyorlov Kursi', m:[]};
+document.getElementById('course').textContent = DATA.t;
+const LANG = DATA.l === 'ru' ? 'ru' : 'uz';
+document.documentElement.lang = LANG;
+const S = {
+  uz: {h1:'Sertifikat imtihon (RASH)',
+       intro:'Mockni tanlang, savollar faylini oching va javoblarni <b>varaqaga belgilang</b>. «Yakunlash» bosilgach natija va <b>darajangiz</b> chatga keladi. 🎥 Tahlil videosi mockni topshirgandan so\'ng ochiladi.',
+       table:'🔬 Mocklar jadvali', lo:'Ochiq', ld:'Topshirilgan', ls:'Tez orada', pdf:'📄 Savollar faylini ochish',
+       closed:'Yopiq testlar', open:'Ochiq savollar (javobni yozing)', fin:'Yakunlash', finBig:'✅ YAKUNLASH',
+       empty:'Hozircha mocklar yo\'q ⏳', start:'Boshlash →', done:'Topshirildi', soon:'Tez orada',
+       already:'Bu mockni allaqachon topshirgansiz. Natija chatda.', q:'-savol', ph:'Javob',
+       leave:'Belgilangan javoblar o\'chib ketadi. Chiqasizmi?',
+       left:n=>n+' ta savol belgilanmagan. Baribir yakunlaysizmi?',
+       sure:'Javoblarni yuborasizmi? Qayta topshirib bo\'lmaydi.', tgOnly:'Telegram ichida oching.'},
+  ru: {h1:'Сертификационный экзамен (RASH)',
+       intro:'Выберите мок, откройте файл с вопросами и <b>отметьте ответы в бланке</b>. После «Завершить» результат и ваш <b>уровень</b> придут в чат. 🎥 Видеоразбор откроется после сдачи мока.',
+       table:'🔬 Таблица моков', lo:'Открыт', ld:'Сдан', ls:'Скоро', pdf:'📄 Открыть файл с вопросами',
+       closed:'Закрытые тесты', open:'Открытые вопросы (впишите ответ)', fin:'Завершить', finBig:'✅ ЗАВЕРШИТЬ',
+       empty:'Моков пока нет ⏳', start:'Начать →', done:'Сдан', soon:'Скоро',
+       already:'Вы уже сдали этот мок. Результат в чате.', q:'', ph:'Ответ',
+       leave:'Отмеченные ответы будут удалены. Выйти?',
+       left:n=>'Не отмечено вопросов: '+n+'. Всё равно завершить?',
+       sure:'Отправить ответы? Пересдать будет нельзя.', tgOnly:'Откройте внутри Telegram.'}
+}[LANG];
+document.querySelectorAll('[data-i]').forEach(el=>{ el.innerHTML = S[el.dataset.i]; });
+document.title = S.h1;
+
+const LET = 'ABCDEF';
+let cur = null, ans = {c:{}, o:{}};
+
+function haptic(t){ try{ tg && tg.HapticFeedback.selectionChanged(); }catch(e){} }
+
+function renderList(){
+  const g = document.getElementById('grid'); g.innerHTML='';
+  if (!DATA.m.length){ g.outerHTML='<div class="empty">'+S.empty+'</div>'; return; }
+  DATA.m.forEach((m,i)=>{
+    const el = document.createElement('div');
+    el.className = 'el ' + m.st;
+    const ico = m.st==='d' ? (m.v?'🎥':'✅') : m.st==='o' ? '🔓' : '⏳';
+    const nm  = m.st==='d' ? S.done : m.st==='o' ? S.start : S.soon;
+    el.innerHTML = `<span class="ico">${ico}</span><span class="num">MOCK</span>
+                    <span class="sym">${m.id}</span><span class="nm">${nm}</span>`;
+    el.onclick = ()=>{
+      if (m.st==='s') return;
+      if (m.st==='d'){
+        if (m.v){ tg ? tg.openLink(m.v) : open(m.v); }
+        else alertMsg(S.already);
+        return;
+      }
+      openSheet(m);
+    };
+    g.appendChild(el);
+  });
+}
+
+function alertMsg(t){ tg && tg.showAlert ? tg.showAlert(t) : alert(t); }
+
+function total(){ return cur.c + cur.o.reduce((s,x)=>s+x[1].length,0); }
+function filled(){
+  return Object.keys(ans.c).length + Object.values(ans.o).filter(v=>v.trim()).length;
+}
+function update(){
+  const f = filled(), t = total();
+  document.getElementById('cnt').textContent = f+' / '+t;
+  document.getElementById('pbar').style.width = (100*f/t)+'%';
+}
+
+function openSheet(m){
+  cur = m; ans = {c:{}, o:{}};
+  document.getElementById('list').style.display='none';
+  document.getElementById('sheet').style.display='block';
+  document.getElementById('stitle').textContent = '⚗️ Mock '+m.id;
+  const pdf = document.getElementById('pdf');
+  if (m.p){ const u = new URL(m.p, location.href).href;
+    pdf.style.display='flex'; pdf.onclick = e=>{e.preventDefault(); tg ? tg.openLink(u) : open(u);} }
+  else pdf.style.display='none';
+
+  const box = document.getElementById('closed'); box.innerHTML='';
+  for (let i=1;i<=m.c;i++){
+    const row = document.createElement('div'); row.className='q';
+    row.innerHTML = `<span class="n">${i}.</span><div class="opts"></div>`;
+    const opts = row.querySelector('.opts');
+    const nOpt = (m.ox && m.ox[i]) || m.op;
+    for (let k=0;k<nOpt;k++){
+      const b = document.createElement('button'); b.className='b'; b.textContent=LET[k];
+      b.onclick = ()=>{
+        if (ans.c[i]===LET[k]){ delete ans.c[i]; b.classList.remove('on'); }
+        else { ans.c[i]=LET[k]; opts.querySelectorAll('.b').forEach(x=>x.classList.remove('on')); b.classList.add('on'); }
+        haptic(); update();
+      };
+      opts.appendChild(b);
+    }
+    box.appendChild(row);
+  }
+  const ob = document.getElementById('open'); ob.innerHTML='';
+  document.getElementById('openWrap').style.display = m.o.length ? 'block':'none';
+  m.o.forEach(([n,parts])=>{
+    const d = document.createElement('div'); d.className='oq';
+    d.innerHTML = (LANG==='ru' ? `<div class="t">Вопрос ${n}</div>` : `<div class="t">${n}-savol</div>`) + parts.map(p=>
+      `<label>${p ? p+')' : ''}<input data-k="${n}${p}" inputmode="decimal" autocomplete="off" placeholder="${S.ph}"></label>`).join('');
+    ob.appendChild(d);
+  });
+  ob.querySelectorAll('input').forEach(inp=>inp.oninput=()=>{ ans.o[inp.dataset.k]=inp.value; update(); });
+  update(); scrollTo(0,0);
+
+  if (tg){
+    tg.BackButton.show(); tg.BackButton.onClick(back);
+    tg.MainButton.setParams({text:S.finBig, color:'#5b4bdb', text_color:'#ffffff'});
+    tg.MainButton.show(); tg.MainButton.onClick(finish);
+  } else {
+    const fb = document.getElementById('fb'); fb.style.display='block'; fb.onclick=finish;
+  }
+}
+
+function back(){
+  const go = ()=>{
+    document.getElementById('sheet').style.display='none';
+    document.getElementById('list').style.display='block';
+    if (tg){ tg.BackButton.hide(); tg.MainButton.hide(); tg.BackButton.offClick(back); tg.MainButton.offClick(finish); }
+  };
+  if (filled() && tg && tg.showConfirm) tg.showConfirm(S.leave, ok=>ok&&go());
+  else go();
+}
+
+function finish(){
+  const left = total() - filled();
+  const send = ()=>{
+    const o = {}; Object.entries(ans.o).forEach(([k,v])=>{ if(v.trim()) o[k]=v.trim(); });
+    const payload = JSON.stringify({mock:cur.id, c:ans.c, o});
+    if (tg && tg.sendData){ tg.sendData(payload); }   // bot natijani chatga yuboradi
+    else alert(S.tgOnly+'\n'+payload);
+  };
+  const msg = left>0 ? S.left(left) : S.sure;
+  if (tg && tg.showConfirm) tg.showConfirm(msg, ok=>ok&&send()); else if (confirm(msg)) send();
+}
+
+renderList();
+</script>
+</body>
+</html>
