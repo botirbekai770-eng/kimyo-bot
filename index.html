@@ -169,6 +169,14 @@
   .wa .tag{min-width:30px;height:30px}
   .solbox{margin-top:12px;background:#f4f2ff;border:1.6px solid #d9d4fb;border-radius:14px;padding:12px 14px;font-size:14.5px;line-height:1.6}
   .solbox .sh{font-size:12px;font-weight:900;color:var(--violet);letter-spacing:.08em;text-transform:uppercase;margin-bottom:6px}
+  .rbtns{margin:4px 14px 20px;display:flex;flex-direction:column;gap:10px}
+  .rbtns button{border:0;border-radius:16px;padding:16px;font-size:16px;font-weight:800;cursor:pointer}
+  .rb1{background:linear-gradient(135deg,var(--vdeep),var(--violet));color:#fff}
+  .rb2{background:var(--graybg);color:var(--ink)}
+  .busy{position:fixed;inset:0;z-index:90;background:rgba(238,243,251,.92);display:none;align-items:center;justify-content:center;text-align:center}
+  .busy b{display:block;margin-top:14px;font-size:16px;color:var(--ink)}
+  .spin{width:46px;height:46px;margin:0 auto;border-radius:50%;border:5px solid #d9d4fb;border-top-color:var(--violet);animation:sp 0.9s linear infinite}
+  @keyframes sp{to{transform:rotate(360deg)}}
 </style>
 </head>
 <body>
@@ -211,7 +219,12 @@
   <div class="leg" id="rleg"></div>
   <div class="map" id="rmap"></div>
   <div class="dcard" id="rdet"></div>
+  <div class="rbtns" id="rbtns">
+    <button class="rb1" id="rToList"></button>
+    <button class="rb2" id="rClose"></button>
+  </div>
 </div>
+<div class="busy" id="busy"><div><div class="spin"></div><b id="busyT"></b></div></div>
 
 <!-- Javob varaqasi -->
 <div class="shade" id="shade"></div>
@@ -266,6 +279,7 @@ const S = {
        m1:'🔥 Ajoyib natija! Shu ruhda davom eting!', m2:'💪 Yaxshi natija! Xatolarni ko\'rib chiqing — keyingisi yanada yuqori bo\'ladi.',
        m3:'📚 Har bir mock — oldinga bir qadam. Xatolar ustida ishlang!',
        qn:n=>`${n}-savol`, your:'Sizning javobingiz', right:'To\'g\'ri javob', cOk:'to\'g\'ri', cBad:'xato', cNo:'javobsiz',
+       sending:'Javoblar tekshirilmoqda…', toList:'📋 Mocklar ro\'yxati', closeApp:'Yopish', sendErr:'Internet bilan muammo. Qayta urinib ko\'ring.',
        sol:'Yechim', solLoad:'Yechim yuklanmoqda…', solNo:'Yechim topilmadi.', wYour:'Sizning javoblaringiz', wRight:'To\'g\'ri javoblar', none:'—'},
   ru: {h1:'Сертификационный экзамен (RASH)',
        intro:'Выберите мок, решайте вопросы и отмечайте ответы в <b>бланке ответов</b>. После «Завершить» результат и ваш <b>уровень</b> придут в чат.',
@@ -291,6 +305,7 @@ const S = {
        m1:'🔥 Отличный результат! Так держать!', m2:'💪 Хороший результат! Разберите ошибки — следующий будет ещё выше.',
        m3:'📚 Каждый мок — шаг вперёд. Работайте над ошибками!',
        qn:n=>`Вопрос ${n}`, your:'Ваш ответ', right:'Правильный ответ', cOk:'верно', cBad:'ошибка', cNo:'без ответа',
+       sending:'Проверяем ответы…', toList:'📋 Список моков', closeApp:'Закрыть', sendErr:'Проблема с интернетом. Попробуйте ещё раз.',
        sol:'Решение', solLoad:'Решение загружается…', solNo:'Решение не найдено.', wYour:'Ваши ответы', wRight:'Правильные ответы', none:'—'}
 }[LANG];
 document.querySelectorAll('[data-i]').forEach(el=>{ el.innerHTML = S[el.dataset.i]; });
@@ -501,7 +516,24 @@ function doSend(){
   const o={}; Object.entries(ans.o).forEach(([k,v])=>{ if(v.trim()) o[k]=v.trim(); });
   const w={}; Object.entries(ans.w).forEach(([k,list])=>{ const l=list.map(x=>x.trim()).filter(Boolean); if (l.length) w[k]=l; });
   const el = Math.round(((cur.tm||180)*60*1000 - Math.max(0, deadline-Date.now()))/1000);
-  const payload = JSON.stringify({mock:cur.id, c:ans.c, o, w, el});
+  const data = {mock:cur.id, c:ans.c, o, w, el};
+  const payload = JSON.stringify(data);
+  if (DATA.api && tg && tg.initData){
+    $('busyT').textContent = S.sending; $('busy').style.display='flex';
+    fetch(DATA.api, {method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify({initData:tg.initData, data})})
+      .then(r=>r.json())
+      .then(j=>{
+        $('busy').style.display='none';
+        if (j && j.ok && j.result){
+          clearInterval(timerId); closeSheet(); $('exam').style.display='none';
+          const m = DATA.m.find(x=>String(x.id)===String(cur.id)); if (m) m.st='d';
+          j.result.t = j.result.t || DATA.t;
+          showResult(j.result); scrollTo(0,0);
+        } else { tg.sendData(payload); }      // zaxira usul
+      })
+      .catch(()=>{ $('busy').style.display='none'; tg.sendData(payload); });
+    return;
+  }
   if (tg && tg.sendData) tg.sendData(payload); else { alert(S.tgOnly+'\n'+payload); sent=false; }
 }
 function finish(){
@@ -525,6 +557,10 @@ function fmtT(s){ const h=Math.floor(s/3600), m=Math.floor(s%3600/60), x=s%60; r
 
 async function showResult(R){
   $('list').style.display='none'; $('result').style.display='block';
+  $('rToList').textContent = S.toList; $('rClose').textContent = S.closeApp;
+  $('rToList').style.display = DATA.m && DATA.m.length ? 'block' : 'none';
+  $('rToList').onclick = ()=>{ $('result').style.display='none'; $('list').style.display='block'; renderList(); scrollTo(0,0); };
+  $('rClose').onclick = ()=>{ tg ? tg.close() : history.back(); };
   if (tg){ tg.BackButton.hide(); tg.MainButton.hide(); }
   const D = R.d;
   $('rcourse').textContent = R.t; $('rtitle').textContent = S.rTitle(R.id);
