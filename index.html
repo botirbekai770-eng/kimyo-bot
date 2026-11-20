@@ -72,6 +72,19 @@
   .oq input{flex:1;padding:10px 12px;border-radius:10px;border:1.6px solid var(--line);font-size:15px;
             background:#f8f9fd;color:var(--ink);outline:none}
   .oq input:focus{border-color:var(--violet)}
+  .qc{background:var(--card);border-radius:16px;padding:14px 14px 10px;margin-bottom:10px;box-shadow:0 1px 4px rgba(20,33,61,.04)}
+  .qt{font-size:15px;line-height:1.5;color:var(--ink);margin-bottom:8px}
+  .qt b{color:var(--violet)}
+  .op{display:flex;align-items:center;gap:10px;padding:9px 10px;margin:6px 0;border:1.6px solid var(--line);
+      border-radius:12px;background:#f8f9fd;font-size:15px;cursor:pointer;transition:all .12s}
+  .op .L{flex:none;width:28px;height:28px;border-radius:8px;border:1.6px solid var(--line);background:#fff;
+         display:flex;align-items:center;justify-content:center;font-weight:800;font-size:13px;color:var(--ink2)}
+  .op.on{border-color:var(--violet);background:#efedff}
+  .op.on .L{background:var(--violet);border-color:var(--violet);color:#fff}
+  .stem{background:#fff8e8;border:1.6px solid #f7d58f;border-radius:16px;padding:12px 14px;margin:4px 0 10px;
+        font-size:15px;line-height:1.5}
+  .stem .sl{font-size:12px;font-weight:800;color:var(--amber);text-transform:uppercase;letter-spacing:.06em;margin-bottom:6px}
+  sub,sup{font-size:.72em;line-height:0}
   .fallback{position:fixed;left:16px;right:16px;bottom:16px;display:none;padding:15px;border:0;border-radius:14px;
             background:var(--violet);color:#fff;font-size:16px;font-weight:800}
   .empty{text-align:center;color:var(--ink2);padding:40px 10px}
@@ -139,23 +152,25 @@ const LANG = DATA.l === 'ru' ? 'ru' : 'uz';
 document.documentElement.lang = LANG;
 const S = {
   uz: {h1:'Sertifikat imtihon (RASH)',
-       intro:'Mockni tanlang, savollar faylini oching va javoblarni <b>varaqaga belgilang</b>. «Yakunlash» bosilgach natija va <b>darajangiz</b> chatga keladi. 🎥 Tahlil videosi mockni topshirgandan so\'ng ochiladi.',
+       intro:'Mockni tanlang, savollarni yeching va to\'g\'ri <b>variantni belgilang</b>. «Yakunlash» bosilgach natija va <b>darajangiz</b> chatga keladi. 🎥 Tahlil videosi mockni topshirgandan so\'ng ochiladi.',
        table:'🔬 Mocklar jadvali', lo:'Ochiq', ld:'Topshirilgan', ls:'Tez orada', pdf:'📄 Savollar faylini ochish',
        closed:'Yopiq testlar', open:'Ochiq savollar (javobni yozing)', fin:'Yakunlash', finBig:'✅ YAKUNLASH',
        empty:'Hozircha mocklar yo\'q ⏳', start:'Boshlash →', done:'Topshirildi', soon:'Tez orada',
        already:'Bu mockni allaqachon topshirgansiz. Natija chatda.', q:'-savol', ph:'Javob',
        leave:'Belgilangan javoblar o\'chib ketadi. Chiqasizmi?',
        left:n=>n+' ta savol belgilanmagan. Baribir yakunlaysizmi?',
-       sure:'Javoblarni yuborasizmi? Qayta topshirib bo\'lmaydi.', tgOnly:'Telegram ichida oching.'},
+       sure:'Javoblarni yuborasizmi? Qayta topshirib bo\'lmaydi.', tgOnly:'Telegram ichida oching.',
+       match:i=>'Moslashtirish: '+i+'–'+(i+2)+'-savollar uchun shart'},
   ru: {h1:'Сертификационный экзамен (RASH)',
-       intro:'Выберите мок, откройте файл с вопросами и <b>отметьте ответы в бланке</b>. После «Завершить» результат и ваш <b>уровень</b> придут в чат. 🎥 Видеоразбор откроется после сдачи мока.',
+       intro:'Выберите мок, решайте вопросы и <b>отмечайте правильный вариант</b>. После «Завершить» результат и ваш <b>уровень</b> придут в чат. 🎥 Видеоразбор откроется после сдачи мока.',
        table:'🔬 Таблица моков', lo:'Открыт', ld:'Сдан', ls:'Скоро', pdf:'📄 Открыть файл с вопросами',
        closed:'Закрытые тесты', open:'Открытые вопросы (впишите ответ)', fin:'Завершить', finBig:'✅ ЗАВЕРШИТЬ',
        empty:'Моков пока нет ⏳', start:'Начать →', done:'Сдан', soon:'Скоро',
        already:'Вы уже сдали этот мок. Результат в чате.', q:'', ph:'Ответ',
        leave:'Отмеченные ответы будут удалены. Выйти?',
        left:n=>'Не отмечено вопросов: '+n+'. Всё равно завершить?',
-       sure:'Отправить ответы? Пересдать будет нельзя.', tgOnly:'Откройте внутри Telegram.'}
+       sure:'Отправить ответы? Пересдать будет нельзя.', tgOnly:'Откройте внутри Telegram.',
+       match:i=>'Соотнесение: условие к вопросам '+i+'–'+(i+2)}
 }[LANG];
 document.querySelectorAll('[data-i]').forEach(el=>{ el.innerHTML = S[el.dataset.i]; });
 document.title = S.h1;
@@ -200,38 +215,72 @@ function update(){
   document.getElementById('pbar').style.width = (100*f/t)+'%';
 }
 
-function openSheet(m){
+async function loadQ(id){
+  try{
+    const r = await fetch(new URL('q'+id+'.json?v='+Date.now(), location.href));
+    if (r.ok) return await r.json();
+  }catch(e){}
+  return null;
+}
+
+function pickOpt(i, k, wrap, cls){
+  if (ans.c[i]===LET[k]){ delete ans.c[i]; wrap.querySelectorAll('.'+cls).forEach(x=>x.classList.remove('on')); }
+  else { ans.c[i]=LET[k]; wrap.querySelectorAll('.'+cls).forEach((x,j)=>x.classList.toggle('on', j===k)); }
+  haptic(); update();
+}
+
+async function openSheet(m){
   cur = m; ans = {c:{}, o:{}};
   document.getElementById('list').style.display='none';
   document.getElementById('sheet').style.display='block';
   document.getElementById('stitle').textContent = '⚗️ Mock '+m.id;
+  const box = document.getElementById('closed');
+  box.innerHTML = '<div class="empty">⏳</div>';
+  const Q = await loadQ(m.id);
   const pdf = document.getElementById('pdf');
-  if (m.p){ const u = new URL(m.p, location.href).href;
+  if (!Q && m.p){ const u = new URL(m.p, location.href).href;
     pdf.style.display='flex'; pdf.onclick = e=>{e.preventDefault(); tg ? tg.openLink(u) : open(u);} }
   else pdf.style.display='none';
 
-  const box = document.getElementById('closed'); box.innerHTML='';
+  box.innerHTML=''; box.className = Q ? '' : 'qs';
+  let lastStem = null;
   for (let i=1;i<=m.c;i++){
-    const row = document.createElement('div'); row.className='q';
-    row.innerHTML = `<span class="n">${i}.</span><div class="opts"></div>`;
-    const opts = row.querySelector('.opts');
     const nOpt = (m.ox && m.ox[i]) || m.op;
-    for (let k=0;k<nOpt;k++){
-      const b = document.createElement('button'); b.className='b'; b.textContent=LET[k];
-      b.onclick = ()=>{
-        if (ans.c[i]===LET[k]){ delete ans.c[i]; b.classList.remove('on'); }
-        else { ans.c[i]=LET[k]; opts.querySelectorAll('.b').forEach(x=>x.classList.remove('on')); b.classList.add('on'); }
-        haptic(); update();
-      };
-      opts.appendChild(b);
+    const q = Q && Q[i];
+    if (q){
+      if (q.stem && q.stem!==lastStem){
+        const st = document.createElement('div'); st.className='stem';
+        st.innerHTML = `<div class="sl">${S.match(i)}</div>${q.stem}`;
+        box.appendChild(st); lastStem = q.stem;
+      }
+      const card = document.createElement('div'); card.className='qc';
+      card.innerHTML = `<div class="qt"><b>${i}.</b> ${q.q}</div>`;
+      for (let k=0;k<nOpt;k++){
+        const o = document.createElement('div'); o.className='op';
+        o.innerHTML = `<span class="L">${LET[k]}</span><span class="ot">${(q.o&&q.o[k])||''}</span>`;
+        o.onclick = ()=>pickOpt(i,k,card,'op');
+        card.appendChild(o);
+      }
+      box.appendChild(card);
+    } else {
+      const row = document.createElement('div'); row.className='q';
+      row.innerHTML = `<span class="n">${i}.</span><div class="opts"></div>`;
+      const opts = row.querySelector('.opts');
+      for (let k=0;k<nOpt;k++){
+        const b = document.createElement('button'); b.className='b'; b.textContent=LET[k];
+        b.onclick = ()=>pickOpt(i,k,opts,'b');
+        opts.appendChild(b);
+      }
+      box.appendChild(row);
     }
-    box.appendChild(row);
   }
   const ob = document.getElementById('open'); ob.innerHTML='';
   document.getElementById('openWrap').style.display = m.o.length ? 'block':'none';
   m.o.forEach(([n,parts])=>{
     const d = document.createElement('div'); d.className='oq';
-    d.innerHTML = (LANG==='ru' ? `<div class="t">Вопрос ${n}</div>` : `<div class="t">${n}-savol</div>`) + parts.map(p=>
+    const qt = Q && Q[n] ? `<div class="qt"><b>${n}.</b> ${Q[n].q}</div>`
+                         : (LANG==='ru' ? `<div class="t">Вопрос ${n}</div>` : `<div class="t">${n}-savol</div>`);
+    d.innerHTML = qt + parts.map(p=>
       `<label>${p ? p+')' : ''}<input data-k="${n}${p}" inputmode="decimal" autocomplete="off" placeholder="${S.ph}"></label>`).join('');
     ob.appendChild(d);
   });
