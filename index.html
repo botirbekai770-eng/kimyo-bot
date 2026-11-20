@@ -8,18 +8,20 @@
 <style>
   :root{
     --ink:#14213d; --ink2:#4a5578; --bg:#eef3fb; --card:#ffffff;
-    --violet:#5b4bdb; --violet2:#8b7cf6; --mint:#12b886; --mintbg:#e3f8ef;
-    --amber:#f08c00; --amberbg:#fff3df; --gray:#a3acc2; --graybg:#e7ebf3;
-    --line:#d8deeb;
+    --violet:#5b4bdb; --violet2:#8b7cf6; --vdeep:#2e2591; --vsoft:#efedff;
+    --mint:#12b886; --mintbg:#e3f8ef; --amber:#f08c00; --amberbg:#fff3df;
+    --red:#e8590c; --gray:#a3acc2; --graybg:#e7ebf3; --line:#d8deeb;
   }
   *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
   body{font-family:-apple-system,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;
-       background:var(--bg);color:var(--ink);min-height:100vh;padding-bottom:90px}
-  /* ── Sarlavha ── */
+       background:var(--bg);color:var(--ink);min-height:100vh}
+  button{font-family:inherit}
+  sub,sup{font-size:.72em;line-height:0}
+
+  /* ── 1-ekran: mocklar ── */
   .hero{position:relative;overflow:hidden;color:#fff;padding:22px 20px 26px;
         background:linear-gradient(135deg,#3b2fb5 0%,#5b4bdb 55%,#7c6cf3 100%)}
-  .hero small{display:flex;align-items:center;gap:6px;font-size:12px;letter-spacing:.12em;
-              text-transform:uppercase;opacity:.8}
+  .hero small{display:flex;align-items:center;gap:6px;font-size:12px;letter-spacing:.12em;text-transform:uppercase;opacity:.8}
   .hero h1{font-size:23px;margin-top:6px;font-weight:800}
   .hero .flask{position:absolute;right:-8px;bottom:-14px;font-size:92px;opacity:.16;transform:rotate(-14deg)}
   .hero .hex{position:absolute;right:70px;top:-26px;width:90px;height:90px;opacity:.12;
@@ -29,12 +31,10 @@
          color:var(--ink2);box-shadow:0 2px 10px rgba(20,33,61,.05);margin-top:-14px;position:relative}
   .intro b{color:var(--ink)}
   h2{font-size:18px;margin:20px 2px 12px;display:flex;align-items:center;gap:8px}
-  /* ── Mock kataklari (Mendeleyev jadvali uslubida) ── */
   .grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
   @media (max-width:340px){.grid{grid-template-columns:repeat(2,1fr)}}
   .el{position:relative;aspect-ratio:1/1.08;border-radius:14px;padding:9px 10px;background:var(--card);
-      border:2px solid var(--line);display:flex;flex-direction:column;justify-content:space-between;
-      cursor:pointer;transition:transform .12s}
+      border:2px solid var(--line);display:flex;flex-direction:column;justify-content:space-between;cursor:pointer;transition:transform .12s}
   .el:active{transform:scale(.96)}
   .el .num{font-size:11px;font-weight:700;color:var(--ink2)}
   .el .sym{font-size:30px;font-weight:900;letter-spacing:-.02em;line-height:1}
@@ -48,46 +48,127 @@
   .el.s .num,.el.s .nm{color:var(--gray)}
   .legend{display:flex;gap:14px;flex-wrap:wrap;margin-top:14px;font-size:12px;color:var(--ink2)}
   .legend i{display:inline-block;width:10px;height:10px;border-radius:3px;margin-right:5px;vertical-align:-1px}
-  /* ── Javob varaqasi ── */
-  #sheet{display:none}
-  .bar{position:sticky;top:0;z-index:5;background:var(--bg);padding:12px 16px 10px;border-bottom:1px solid var(--line)}
-  .bar .row{display:flex;justify-content:space-between;align-items:center;font-size:14px;font-weight:700}
-  .prog{height:7px;border-radius:7px;background:var(--graybg);margin-top:8px;overflow:hidden}
-  .prog div{height:100%;width:0;background:linear-gradient(90deg,var(--violet),var(--violet2));transition:width .2s}
-  .pdf{display:flex;align-items:center;gap:10px;background:var(--card);border-radius:14px;padding:12px 14px;
-       margin:14px 0;font-size:14px;font-weight:600;color:var(--violet);text-decoration:none;border:1.5px solid #d9d4fb}
-  .sec{font-size:13px;font-weight:800;color:var(--ink2);text-transform:uppercase;letter-spacing:.08em;margin:18px 2px 8px}
-  .qs{background:var(--card);border-radius:16px;padding:4px 10px}
-  .q{display:flex;align-items:center;gap:8px;padding:9px 2px;border-bottom:1px solid #eef1f7}
-  .q:last-child{border-bottom:0}
-  .q .n{width:30px;font-weight:800;font-size:14px;color:var(--ink2);text-align:right}
-  .opts{display:flex;gap:6px;flex-wrap:wrap}
-  @media (max-width:360px){.b{width:32px;height:32px}}
-  .b{width:36px;height:36px;border-radius:10px;border:1.6px solid var(--line);background:#f8f9fd;
-     font-weight:800;font-size:14px;color:var(--ink2);display:flex;align-items:center;justify-content:center}
-  .b.on{background:var(--violet);border-color:var(--violet);color:#fff;box-shadow:0 3px 8px rgba(91,75,219,.35)}
-  .oq{background:var(--card);border-radius:16px;padding:12px 14px;margin-bottom:10px}
-  .oq .t{font-weight:800;margin-bottom:8px}
-  .oq label{display:flex;align-items:center;gap:8px;margin:6px 0;font-weight:700;color:var(--ink2)}
-  .oq input{flex:1;padding:10px 12px;border-radius:10px;border:1.6px solid var(--line);font-size:15px;
-            background:#f8f9fd;color:var(--ink);outline:none}
-  .oq input:focus{border-color:var(--violet)}
+  .empty{text-align:center;color:var(--ink2);padding:40px 10px}
+
+  /* ── 2-ekran: savollar ── */
+  #exam{display:none;padding-bottom:110px}
+  .top{position:sticky;top:0;z-index:20;display:flex;align-items:center;gap:12px;padding:12px 14px;
+       background:rgba(238,243,251,.96);backdrop-filter:blur(6px);border-bottom:1px solid var(--line)}
+  .iconbtn{flex:none;width:42px;height:42px;border-radius:12px;border:0;background:var(--card);
+           box-shadow:0 1px 4px rgba(20,33,61,.08);font-size:20px;font-weight:800;color:var(--ink);cursor:pointer}
+  .tt{flex:1;min-width:0}
+  .tt b{display:block;font-size:18px;font-weight:800}
+  .timer{font-size:14px;font-weight:800;color:var(--violet);font-variant-numeric:tabular-nums}
+  .timer.low{color:var(--red)}
+  .finbtn{flex:none;border:0;border-radius:14px;padding:12px 16px;font-size:15px;font-weight:800;color:#fff;cursor:pointer;
+          background:linear-gradient(135deg,var(--violet),var(--violet2));box-shadow:0 4px 12px rgba(91,75,219,.35)}
+  .qwrap{padding:14px}
+  .sect{font-size:12px;font-weight:800;color:var(--violet);text-transform:uppercase;letter-spacing:.08em;margin:18px 4px 8px}
   .qc{background:var(--card);border-radius:16px;padding:14px 14px 10px;margin-bottom:10px;box-shadow:0 1px 4px rgba(20,33,61,.04)}
-  .qt{font-size:15px;line-height:1.5;color:var(--ink);margin-bottom:8px}
+  .qt{font-size:15px;line-height:1.55;color:var(--ink);margin-bottom:6px}
   .qt b{color:var(--violet)}
   .op{display:flex;align-items:center;gap:10px;padding:9px 10px;margin:6px 0;border:1.6px solid var(--line);
       border-radius:12px;background:#f8f9fd;font-size:15px;cursor:pointer;transition:all .12s}
   .op .L{flex:none;width:28px;height:28px;border-radius:8px;border:1.6px solid var(--line);background:#fff;
          display:flex;align-items:center;justify-content:center;font-weight:800;font-size:13px;color:var(--ink2)}
-  .op.on{border-color:var(--violet);background:#efedff}
+  .op.on{border-color:var(--violet);background:var(--vsoft)}
   .op.on .L{background:var(--violet);border-color:var(--violet);color:#fff}
-  .stem{background:#fff8e8;border:1.6px solid #f7d58f;border-radius:16px;padding:12px 14px;margin:4px 0 10px;
-        font-size:15px;line-height:1.5}
+  .stem{background:#fff8e8;border:1.6px solid #f7d58f;border-radius:16px;padding:12px 14px;margin:4px 0 10px;font-size:15px;line-height:1.55}
   .stem .sl{font-size:12px;font-weight:800;color:var(--amber);text-transform:uppercase;letter-spacing:.06em;margin-bottom:6px}
-  sub,sup{font-size:.72em;line-height:0}
-  .fallback{position:fixed;left:16px;right:16px;bottom:16px;display:none;padding:15px;border:0;border-radius:14px;
-            background:var(--violet);color:#fff;font-size:16px;font-weight:800}
-  .empty{text-align:center;color:var(--ink2);padding:40px 10px}
+  .hint{font-size:13px;color:var(--ink2);margin-top:6px}
+  .gotoans{display:inline-block;margin-top:6px;font-size:13px;font-weight:700;color:var(--violet);cursor:pointer}
+
+  /* ── Javob varaqasi tugmasi va oynasi ── */
+  .sheetbar{position:fixed;left:14px;right:14px;bottom:14px;z-index:30;border:0;border-radius:20px;padding:17px;
+            background:linear-gradient(135deg,var(--vdeep),var(--violet));color:#fff;font-size:17px;font-weight:800;
+            box-shadow:0 8px 24px rgba(46,37,145,.35);cursor:pointer}
+  .shade{position:fixed;inset:0;background:rgba(20,33,61,.35);z-index:40;display:none}
+  .sheet{position:fixed;left:0;right:0;bottom:0;z-index:50;max-height:88vh;overflow:auto;background:#fbfbff;
+         border-radius:22px 22px 0 0;padding:0 14px 30px;transform:translateY(105%);transition:transform .25s ease}
+  .sheet.open{transform:none}
+  .shead{position:sticky;top:0;z-index:2;display:flex;align-items:center;gap:10px;padding:16px 2px 12px;background:#fbfbff}
+  .shead h3{flex:1;font-size:19px;font-weight:800}
+  .pill{background:var(--vsoft);color:var(--violet);font-weight:800;font-size:14px;padding:6px 12px;border-radius:12px}
+  .closebtn{border:0;background:var(--graybg);color:var(--ink);font-weight:800;font-size:14px;padding:10px 14px;border-radius:12px;cursor:pointer}
+  .grp{display:flex;align-items:baseline;gap:8px;margin:16px 4px 8px}
+  .grp b{font-size:13px;font-weight:900;color:var(--violet);letter-spacing:.06em;text-transform:uppercase;white-space:nowrap}
+  .grp span{font-size:13px;color:var(--ink2);line-height:1.35}
+  .box{background:var(--vsoft);border-radius:18px;padding:4px 12px}
+  .row{display:flex;align-items:center;gap:8px;padding:9px 0;border-bottom:1px dashed #d9d4fb}
+  .row:last-child{border-bottom:0}
+  .row .n{flex:none;width:28px;font-weight:800;font-size:16px;color:var(--ink2);text-align:right;cursor:pointer}
+  .bub{display:flex;flex:1;justify-content:space-around;gap:6px}
+  .bb{width:44px;height:44px;border-radius:50%;border:2px solid #d9d4fb;background:#fff;font-weight:800;font-size:15px;color:var(--ink2);cursor:pointer}
+  .six .bb{width:38px;height:38px;font-size:14px}
+  @media (max-width:360px){.bb{width:38px;height:38px}.six .bb{width:33px;height:33px}}
+  .bb.on{background:var(--violet);border-color:var(--violet);color:#fff;box-shadow:0 3px 8px rgba(91,75,219,.35)}
+  .inp{flex:1;padding:12px 14px;border-radius:14px;border:2px solid #d9d4fb;background:#fff;font-size:16px;color:var(--ink);outline:none;min-width:0}
+  .inp:focus{border-color:var(--violet)}
+  .wt{padding:12px 0 14px;border-bottom:1px dashed #d9d4fb}
+  .wt:last-child{border-bottom:0}
+  .wh{display:flex;justify-content:space-between;align-items:center;margin-bottom:8px}
+  .wh b{font-size:16px}
+  .wh span{font-size:13px;color:var(--ink2)}
+  .wl{display:flex;align-items:center;gap:8px;margin:7px 0}
+  .tag{flex:none;min-width:34px;height:34px;padding:0 6px;border-radius:10px;background:#fff;border:2px solid #d9d4fb;
+       color:var(--violet);font-weight:800;display:flex;align-items:center;justify-content:center}
+  .pm{display:flex;gap:8px;margin-top:8px}
+  .pm button{width:52px;height:44px;border:0;border-radius:12px;font-size:22px;font-weight:800;color:#fff;cursor:pointer}
+  .plus{background:var(--mint)}
+  .minus{background:#f3a8a0}
+  .minus:disabled{opacity:.45;cursor:default}
+  .sheetfin{display:block;width:100%;margin-top:18px;border:0;border-radius:16px;padding:16px;font-size:16px;font-weight:800;color:#fff;
+            background:linear-gradient(135deg,var(--violet),var(--violet2));cursor:pointer}
+
+  /* ── 3-ekran: natija ── */
+  #result{display:none;padding-bottom:30px}
+  .rhead{background:linear-gradient(135deg,#2e2591,#5b4bdb);color:#fff;padding:18px 18px 22px}
+  .rhead small{font-size:12px;letter-spacing:.12em;text-transform:uppercase;opacity:.8}
+  .rhead h1{font-size:22px;font-weight:800;margin-top:6px}
+  .rcard{margin:14px;border-radius:22px;padding:18px;color:#fff;
+         background:linear-gradient(150deg,#3b2fb5 0%,#5b4bdb 60%,#7c6cf3 100%);box-shadow:0 8px 24px rgba(46,37,145,.25)}
+  .rcard .lbl{font-size:14px;opacity:.85}
+  .big{display:flex;align-items:baseline;gap:6px;margin-top:4px}
+  .big b{font-size:54px;font-weight:900;line-height:1}
+  .big span{font-size:20px;font-weight:700;opacity:.8}
+  .rbar{height:9px;border-radius:9px;background:rgba(255,255,255,.25);margin:14px 0 12px;overflow:hidden}
+  .rbar div{height:100%;background:#c9f27a;border-radius:9px}
+  .motiv{font-size:15px;font-weight:800;color:#e6ffb8;line-height:1.4}
+  .tiles{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-top:14px}
+  .tile{background:rgba(255,255,255,.16);border-radius:14px;padding:10px 9px}
+  .tile b{display:block;font-size:19px;font-weight:900}
+  .tile span{font-size:11.5px;opacity:.9;line-height:1.25;display:block;margin-top:2px}
+  .lvl{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-top:10px;
+       background:rgba(255,255,255,.16);border-radius:14px;padding:14px 16px}
+  .lvl .t{font-size:13px;opacity:.9}
+  .lvl .v{font-size:26px;font-weight:900;color:#e6ffb8}
+  .lvl .s b{font-size:28px;font-weight:900;color:#e6ffb8}
+  .lvl .s span{font-size:12px;opacity:.9;margin-left:4px}
+  .mapt{margin:18px 16px 8px;font-size:13px;font-weight:900;color:var(--violet);letter-spacing:.08em;text-transform:uppercase}
+  .leg{display:flex;gap:14px;margin:0 16px 10px;font-size:13px;color:var(--ink2)}
+  .leg i{display:inline-block;width:12px;height:12px;border-radius:4px;margin-right:5px;vertical-align:-1px}
+  .map{display:grid;grid-template-columns:repeat(7,1fr);gap:8px;margin:0 14px}
+  .cell{aspect-ratio:1/0.82;border-radius:12px;border:0;font-size:16px;font-weight:800;cursor:pointer;
+        background:var(--graybg);color:#8a93a8}
+  .cell.ok{background:var(--mint);color:#fff}
+  .cell.bad{background:#e5484d;color:#fff}
+  .cell.sel{outline:3px solid #f5c542;outline-offset:2px}
+  .dcard{margin:14px;background:var(--card);border-radius:20px;padding:16px;box-shadow:0 2px 10px rgba(20,33,61,.06)}
+  .dcard h4{font-size:17px;font-weight:800;margin-bottom:8px}
+  .dq{font-size:15px;line-height:1.55;max-height:260px;overflow:auto;padding-right:4px;border-bottom:1px solid var(--line);padding-bottom:10px;margin-bottom:10px}
+  .dq .st{color:var(--ink2);font-size:14px;margin-bottom:6px}
+  .dop{border:1.6px solid var(--line);border-radius:12px;padding:10px 12px;margin:7px 0;font-size:15px}
+  .dop.ok{background:#e3f8ef;border-color:#52c793;color:#0b7a4b;font-weight:800}
+  .dop.bad{background:#ffe4e4;border-color:#f08b8b;color:#b42323;font-weight:800}
+  .arrow{font-weight:800;margin:10px 0 6px}
+  .kv{display:flex;justify-content:space-between;align-items:center;padding:7px 0;font-size:15px}
+  .kv b{font-size:16px}
+  .chip{display:inline-block;font-size:12px;font-weight:800;padding:3px 9px;border-radius:9px;margin-left:6px}
+  .chip.ok{background:#e3f8ef;color:#0b7a4b}.chip.bad{background:#ffe4e4;color:#b42323}.chip.no{background:var(--graybg);color:var(--ink2)}
+  .wa{display:flex;align-items:center;gap:8px;padding:6px 0;font-size:15px}
+  .wa .tag{min-width:30px;height:30px}
+  .solbox{margin-top:12px;background:#f4f2ff;border:1.6px solid #d9d4fb;border-radius:14px;padding:12px 14px;font-size:14.5px;line-height:1.6}
+  .solbox .sh{font-size:12px;font-weight:900;color:var(--violet);letter-spacing:.08em;text-transform:uppercase;margin-bottom:6px}
 </style>
 </head>
 <body>
@@ -100,44 +181,53 @@
     <h1 data-i="h1">Sertifikat imtihon (RASH)</h1>
   </div>
   <div class="wrap">
-    <div class="intro" data-i="intro">
-      Mockni tanlang, savollar faylini oching va javoblarni <b>varaqaga belgilang</b>.
-      «Yakunlash» bosilgach natija va <b>darajangiz</b> chatga keladi.
-      🎥 Tahlil videosi mockni topshirgandan so'ng ochiladi.
-    </div>
+    <div class="intro" data-i="intro"></div>
     <h2 data-i="table">🔬 Mocklar jadvali</h2>
     <div class="grid" id="grid"></div>
     <div class="legend">
-      <span><i style="background:#f7c873"></i><b data-i="lo" style="font-weight:400">Ochiq</b></span>
-      <span><i style="background:#8fe0c2"></i><b data-i="ld" style="font-weight:400">Topshirilgan</b></span>
-      <span><i style="background:#c9d0df"></i><b data-i="ls" style="font-weight:400">Tez orada</b></span>
+      <span><i style="background:#f7c873"></i><b data-i="lo" style="font-weight:400"></b></span>
+      <span><i style="background:#8fe0c2"></i><b data-i="ld" style="font-weight:400"></b></span>
+      <span><i style="background:#c9d0df"></i><b data-i="ls" style="font-weight:400"></b></span>
     </div>
   </div>
 </div>
 
-<!-- 2-ekran: javob varaqasi -->
-<div id="sheet">
-  <div class="bar">
-    <div class="row"><span id="stitle">Mock</span><span id="cnt">0 / 0</span></div>
-    <div class="prog"><div id="pbar"></div></div>
+<!-- 2-ekran: savollar -->
+<div id="exam">
+  <div class="top">
+    <button class="iconbtn" id="backBtn">‹</button>
+    <div class="tt"><b id="etitle">Mock</b><span class="timer" id="timer"></span></div>
+    <button class="finbtn" id="finTop" data-i="fin"></button>
   </div>
-  <div class="wrap">
-    <a class="pdf" id="pdf" href="#" style="display:none"><span data-i="pdf">📄 Savollar faylini ochish</span> <span style="margin-left:auto">↗</span></a>
-    <div class="sec" data-i="closed">Yopiq testlar</div>
-    <div class="qs" id="closed"></div>
-    <div id="openWrap">
-      <div class="sec" data-i="open">Ochiq savollar (javobni yozing)</div>
-      <div id="open"></div>
-    </div>
+  <div class="qwrap" id="qwrap"></div>
+  <button class="sheetbar" id="sheetBar"></button>
+</div>
+
+<!-- 3-ekran: natija -->
+<div id="result">
+  <div class="rhead"><small id="rcourse"></small><h1 id="rtitle"></h1></div>
+  <div class="rcard" id="rcard"></div>
+  <div class="mapt" id="rmapt"></div>
+  <div class="leg" id="rleg"></div>
+  <div class="map" id="rmap"></div>
+  <div class="dcard" id="rdet"></div>
+</div>
+
+<!-- Javob varaqasi -->
+<div class="shade" id="shade"></div>
+<div class="sheet" id="sheet">
+  <div class="shead">
+    <h3 data-i="sheet"></h3><span class="pill" id="pill">0 / 0</span>
+    <button class="closebtn" id="closeSheet" data-i="close"></button>
   </div>
-  <button class="fallback" id="fb" data-i="fin">Yakunlash</button>
+  <div id="sbody"></div>
+  <button class="sheetfin" id="finBottom" data-i="finBig"></button>
 </div>
 
 <script>
 const tg = window.Telegram ? Telegram.WebApp : null;
 if (tg) { tg.ready(); tg.expand(); try{tg.setHeaderColor('#3b2fb5');tg.setBackgroundColor('#eef3fb');}catch(e){} }
 
-// Bot URL orqali yuborgan ma'lumot: ?d=<base64>
 function decode(){
   try{
     let s = new URLSearchParams(location.search).get('d') || '';
@@ -147,178 +237,363 @@ function decode(){
   }catch(e){ return null; }
 }
 const DATA = decode() || {t:'Kimyo Tayyorlov Kursi', m:[]};
-document.getElementById('course').textContent = DATA.t;
 const LANG = DATA.l === 'ru' ? 'ru' : 'uz';
 document.documentElement.lang = LANG;
+document.getElementById('course').textContent = DATA.t;
+
 const S = {
   uz: {h1:'Sertifikat imtihon (RASH)',
-       intro:'Mockni tanlang, savollarni yeching va to\'g\'ri <b>variantni belgilang</b>. «Yakunlash» bosilgach natija va <b>darajangiz</b> chatga keladi. 🎥 Tahlil videosi mockni topshirgandan so\'ng ochiladi.',
-       table:'🔬 Mocklar jadvali', lo:'Ochiq', ld:'Topshirilgan', ls:'Tez orada', pdf:'📄 Savollar faylini ochish',
-       closed:'Yopiq testlar', open:'Ochiq savollar (javobni yozing)', fin:'Yakunlash', finBig:'✅ YAKUNLASH',
+       intro:'Mockni tanlang, savollarni yeching va javoblarni <b>javob varaqasiga</b> belgilang. «Yakunlash» bosilgach natija va <b>darajangiz</b> chatga keladi.',
+       table:'🔬 Mocklar jadvali', lo:'Ochiq', ld:'Topshirilgan', ls:'Tez orada',
        empty:'Hozircha mocklar yo\'q ⏳', start:'Boshlash →', done:'Topshirildi', soon:'Tez orada',
-       already:'Bu mockni allaqachon topshirgansiz. Natija chatda.', q:'-savol', ph:'Javob',
+       already:'Bu mockni allaqachon topshirgansiz. Natija chatda.',
+       fin:'Yakunlash', finBig:'✅ Yakunlash va yuborish', sheet:'Javob varaqasi', close:'Yopish ▼',
+       bar:(f,t)=>`Javob varaqasi · ${f} / ${t} ▲`, left:t=>`⏳ ${t} qoldi`,
+       closed:'Test savollari', open:'Qisqa javobli savollar', written:'Yozma ish',
+       gTest:'1–32 · bitta javob (A–D)', gMatch:'33–35 · A–F', gShort:'36–40 · raqam yozing (3,6 yoki 3.6). Ikki javob bo\'lsa «;» bilan: 32; 63',
+       gWritten:'41–43 · har bir javobga alohida katak',
+       nTest:'TEST', nMatch:'Moslashtirish', nShort:'Qisqa javob', nWritten:'Yozma ish',
+       task:n=>`${n}-masala`, cnt:n=>`${n} ta javob`, ph:'Javob',
+       wHint:'Har bir shart javobini alohida katakka yozing. Katak qo\'shish: «+».',
+       toSheet:'✍️ Javobni varaqaga yozish',
+       match:i=>'Moslashtirish: '+i+'–'+(i+2)+'-savollar uchun shart',
        leave:'Belgilangan javoblar o\'chib ketadi. Chiqasizmi?',
-       left:n=>n+' ta savol belgilanmagan. Baribir yakunlaysizmi?',
+       leftQ:n=>n+' ta savol javobsiz. Baribir yakunlaysizmi?',
        sure:'Javoblarni yuborasizmi? Qayta topshirib bo\'lmaydi.', tgOnly:'Telegram ichida oching.',
-       match:i=>'Moslashtirish: '+i+'–'+(i+2)+'-savollar uchun shart'},
+       timeUp:'Vaqt tugadi. Javoblaringiz yuborilmoqda.', noQ:'Savollar yuklanmadi. Internetni tekshirib, qayta oching.',
+       rTitle:id=>`Mock ${id} · Natija`, rRight:'To\'g\'ri javoblar', tTest:'1–35 test', tShort:'36–40 qisqa', tW:'41–43 katak', tTime:'vaqt',
+       lvl:'Daraja', noLvl:'Daraja yo\'q', est:'taxminiy ball', mapT:'Savollar xaritasi', lOk:'to\'g\'ri', lBad:'xato', lNo:'javobsiz',
+       m1:'🔥 Ajoyib natija! Shu ruhda davom eting!', m2:'💪 Yaxshi natija! Xatolarni ko\'rib chiqing — keyingisi yanada yuqori bo\'ladi.',
+       m3:'📚 Har bir mock — oldinga bir qadam. Xatolar ustida ishlang!',
+       qn:n=>`${n}-savol`, your:'Sizning javobingiz', right:'To\'g\'ri javob', cOk:'to\'g\'ri', cBad:'xato', cNo:'javobsiz',
+       sol:'Yechim', solLoad:'Yechim yuklanmoqda…', solNo:'Yechim topilmadi.', wYour:'Sizning javoblaringiz', wRight:'To\'g\'ri javoblar', none:'—'},
   ru: {h1:'Сертификационный экзамен (RASH)',
-       intro:'Выберите мок, решайте вопросы и <b>отмечайте правильный вариант</b>. После «Завершить» результат и ваш <b>уровень</b> придут в чат. 🎥 Видеоразбор откроется после сдачи мока.',
-       table:'🔬 Таблица моков', lo:'Открыт', ld:'Сдан', ls:'Скоро', pdf:'📄 Открыть файл с вопросами',
-       closed:'Закрытые тесты', open:'Открытые вопросы (впишите ответ)', fin:'Завершить', finBig:'✅ ЗАВЕРШИТЬ',
+       intro:'Выберите мок, решайте вопросы и отмечайте ответы в <b>бланке ответов</b>. После «Завершить» результат и ваш <b>уровень</b> придут в чат.',
+       table:'🔬 Таблица моков', lo:'Открыт', ld:'Сдан', ls:'Скоро',
        empty:'Моков пока нет ⏳', start:'Начать →', done:'Сдан', soon:'Скоро',
-       already:'Вы уже сдали этот мок. Результат в чате.', q:'', ph:'Ответ',
+       already:'Вы уже сдали этот мок. Результат в чате.',
+       fin:'Завершить', finBig:'✅ Завершить и отправить', sheet:'Бланк ответов', close:'Закрыть ▼',
+       bar:(f,t)=>`Бланк ответов · ${f} / ${t} ▲`, left:t=>`⏳ осталось ${t}`,
+       closed:'Тестовые вопросы', open:'Вопросы с кратким ответом', written:'Письменная часть',
+       gTest:'1–32 · один ответ (A–D)', gMatch:'33–35 · A–F', gShort:'36–40 · впишите число (3,6 или 3.6). Если ответов два — через «;»: 32; 63',
+       gWritten:'41–43 · каждый ответ в отдельной ячейке',
+       nTest:'ТЕСТ', nMatch:'Соотнесение', nShort:'Краткий ответ', nWritten:'Письменная часть',
+       task:n=>`Задача ${n}`, cnt:n=>`ответов: ${n}`, ph:'Ответ',
+       wHint:'Ответ на каждое условие — в отдельную ячейку. Добавить ячейку: «+».',
+       toSheet:'✍️ Записать ответ в бланк',
+       match:i=>'Соотнесение: условие к вопросам '+i+'–'+(i+2),
        leave:'Отмеченные ответы будут удалены. Выйти?',
-       left:n=>'Не отмечено вопросов: '+n+'. Всё равно завершить?',
+       leftQ:n=>'Без ответа вопросов: '+n+'. Всё равно завершить?',
        sure:'Отправить ответы? Пересдать будет нельзя.', tgOnly:'Откройте внутри Telegram.',
-       match:i=>'Соотнесение: условие к вопросам '+i+'–'+(i+2)}
+       timeUp:'Время вышло. Ваши ответы отправляются.', noQ:'Вопросы не загрузились. Проверьте интернет и откройте снова.',
+       rTitle:id=>`Mock ${id} · Результат`, rRight:'Верные ответы', tTest:'1–35 тест', tShort:'36–40 кратко', tW:'41–43 ячейки', tTime:'время',
+       lvl:'Уровень', noLvl:'Без уровня', est:'примерный балл', mapT:'Карта вопросов', lOk:'верно', lBad:'ошибка', lNo:'без ответа',
+       m1:'🔥 Отличный результат! Так держать!', m2:'💪 Хороший результат! Разберите ошибки — следующий будет ещё выше.',
+       m3:'📚 Каждый мок — шаг вперёд. Работайте над ошибками!',
+       qn:n=>`Вопрос ${n}`, your:'Ваш ответ', right:'Правильный ответ', cOk:'верно', cBad:'ошибка', cNo:'без ответа',
+       sol:'Решение', solLoad:'Решение загружается…', solNo:'Решение не найдено.', wYour:'Ваши ответы', wRight:'Правильные ответы', none:'—'}
 }[LANG];
 document.querySelectorAll('[data-i]').forEach(el=>{ el.innerHTML = S[el.dataset.i]; });
 document.title = S.h1;
 
-const LET = 'ABCDEF';
-let cur = null, ans = {c:{}, o:{}};
+const LET = 'ABCDEF', PARTS = 'abcdefghij';
+let cur = null, Q = null, ans = {c:{}, o:{}, w:{}}, timerId = null, deadline = 0, sent = false;
+const $ = id => document.getElementById(id);
+function haptic(){ try{ tg && tg.HapticFeedback.selectionChanged(); }catch(e){} }
+function alertMsg(t){ tg && tg.showAlert ? tg.showAlert(t) : alert(t); }
+function confirmMsg(t, cb){ if (tg && tg.showConfirm) tg.showConfirm(t, cb); else cb(confirm(t)); }
 
-function haptic(t){ try{ tg && tg.HapticFeedback.selectionChanged(); }catch(e){} }
-
+/* ── Mocklar ro'yxati ── */
 function renderList(){
-  const g = document.getElementById('grid'); g.innerHTML='';
+  const g = $('grid'); g.innerHTML='';
   if (!DATA.m.length){ g.outerHTML='<div class="empty">'+S.empty+'</div>'; return; }
-  DATA.m.forEach((m,i)=>{
+  DATA.m.forEach(m=>{
     const el = document.createElement('div');
     el.className = 'el ' + m.st;
     const ico = m.st==='d' ? (m.v?'🎥':'✅') : m.st==='o' ? '🔓' : '⏳';
     const nm  = m.st==='d' ? S.done : m.st==='o' ? S.start : S.soon;
-    el.innerHTML = `<span class="ico">${ico}</span><span class="num">MOCK</span>
-                    <span class="sym">${m.id}</span><span class="nm">${nm}</span>`;
+    el.innerHTML = `<span class="ico">${ico}</span><span class="num">MOCK</span><span class="sym">${m.id}</span><span class="nm">${nm}</span>`;
     el.onclick = ()=>{
       if (m.st==='s') return;
-      if (m.st==='d'){
-        if (m.v){ tg ? tg.openLink(m.v) : open(m.v); }
-        else alertMsg(S.already);
-        return;
-      }
-      openSheet(m);
+      if (m.st==='d'){ if (m.v){ tg ? tg.openLink(m.v) : open(m.v); } else alertMsg(S.already); return; }
+      openExam(m);
     };
     g.appendChild(el);
   });
 }
 
-function alertMsg(t){ tg && tg.showAlert ? tg.showAlert(t) : alert(t); }
-
-function total(){ return cur.c + cur.o.reduce((s,x)=>s+x[1].length,0); }
+/* ── Hisoblagich ── */
+function wList(){ return (cur.w||[]); }
+function total(){ return cur.c + cur.o.length + wList().length; }
 function filled(){
-  return Object.keys(ans.c).length + Object.values(ans.o).filter(v=>v.trim()).length;
+  let f = Object.keys(ans.c).length;
+  f += cur.o.filter(([n])=>(ans.o[n]||'').trim()).length;
+  f += wList().filter(n=>(ans.w[n]||[]).some(x=>x.trim())).length;
+  return f;
 }
 function update(){
   const f = filled(), t = total();
-  document.getElementById('cnt').textContent = f+' / '+t;
-  document.getElementById('pbar').style.width = (100*f/t)+'%';
+  $('sheetBar').textContent = S.bar(f,t);
+  $('pill').textContent = f+' / '+t;
 }
 
-async function loadQ(id){
-  try{
-    const r = await fetch(new URL('q'+id+'.json?v='+Date.now(), location.href));
-    if (r.ok) return await r.json();
-  }catch(e){}
-  return null;
-}
-
-function pickOpt(i, k, wrap, cls){
-  if (ans.c[i]===LET[k]){ delete ans.c[i]; wrap.querySelectorAll('.'+cls).forEach(x=>x.classList.remove('on')); }
-  else { ans.c[i]=LET[k]; wrap.querySelectorAll('.'+cls).forEach((x,j)=>x.classList.toggle('on', j===k)); }
+/* ── Yopiq savol tanlovi (savol kartasi va varaqa bir-biriga bog'langan) ── */
+function choose(i, letter){
+  if (ans.c[i]===letter) delete ans.c[i]; else ans.c[i]=letter;
+  document.querySelectorAll(`[data-q="${i}"]`).forEach(el=>el.classList.toggle('on', ans.c[i]===el.dataset.l));
   haptic(); update();
 }
 
-async function openSheet(m){
-  cur = m; ans = {c:{}, o:{}};
-  document.getElementById('list').style.display='none';
-  document.getElementById('sheet').style.display='block';
-  document.getElementById('stitle').textContent = '⚗️ Mock '+m.id;
-  const box = document.getElementById('closed');
-  box.innerHTML = '<div class="empty">⏳</div>';
-  const Q = await loadQ(m.id);
-  const pdf = document.getElementById('pdf');
-  if (!Q && m.p){ const u = new URL(m.p, location.href).href;
-    pdf.style.display='flex'; pdf.onclick = e=>{e.preventDefault(); tg ? tg.openLink(u) : open(u);} }
-  else pdf.style.display='none';
+async function loadQ(id){
+  try{ const r = await fetch(new URL('q'+id+'.json?v='+Date.now(), location.href)); if (r.ok) return await r.json(); }catch(e){}
+  return null;
+}
 
-  box.innerHTML=''; box.className = Q ? '' : 'qs';
+async function openExam(m){
+  cur = m; ans = {c:{}, o:{}, w:{}}; sent = false;
+  wList().forEach(n=>ans.w[n]=['']);
+  $('list').style.display='none'; $('exam').style.display='block';
+  $('etitle').textContent = 'Mock '+m.id;
+  $('qwrap').innerHTML = '<div class="empty">⏳</div>';
+  Q = await loadQ(m.id);
+  renderQuestions(); renderSheet(); update(); scrollTo(0,0);
+  startTimer((m.tm||180)*60);
+  if (tg){ tg.BackButton.show(); tg.BackButton.onClick(back); tg.MainButton.hide(); }
+}
+
+function renderQuestions(){
+  const w = $('qwrap'); w.innerHTML='';
+  if (!Q){ w.innerHTML = `<div class="empty">${S.noQ}</div>`; return; }
+  const sec = t=>{ const d=document.createElement('div'); d.className='sect'; d.textContent=t; w.appendChild(d); };
+  sec(S.closed);
   let lastStem = null;
-  for (let i=1;i<=m.c;i++){
-    const nOpt = (m.ox && m.ox[i]) || m.op;
-    const q = Q && Q[i];
-    if (q){
-      if (q.stem && q.stem!==lastStem){
-        const st = document.createElement('div'); st.className='stem';
-        st.innerHTML = `<div class="sl">${S.match(i)}</div>${q.stem}`;
-        box.appendChild(st); lastStem = q.stem;
-      }
-      const card = document.createElement('div'); card.className='qc';
-      card.innerHTML = `<div class="qt"><b>${i}.</b> ${q.q}</div>`;
-      for (let k=0;k<nOpt;k++){
-        const o = document.createElement('div'); o.className='op';
-        o.innerHTML = `<span class="L">${LET[k]}</span><span class="ot">${(q.o&&q.o[k])||''}</span>`;
-        o.onclick = ()=>pickOpt(i,k,card,'op');
-        card.appendChild(o);
-      }
-      box.appendChild(card);
-    } else {
-      const row = document.createElement('div'); row.className='q';
-      row.innerHTML = `<span class="n">${i}.</span><div class="opts"></div>`;
-      const opts = row.querySelector('.opts');
-      for (let k=0;k<nOpt;k++){
-        const b = document.createElement('button'); b.className='b'; b.textContent=LET[k];
-        b.onclick = ()=>pickOpt(i,k,opts,'b');
-        opts.appendChild(b);
-      }
-      box.appendChild(row);
+  for (let i=1;i<=cur.c;i++){
+    const q = Q[i]; if (!q) continue;
+    const nOpt = (cur.ox && cur.ox[i]) || cur.op;
+    if (q.stem && q.stem!==lastStem){
+      const st=document.createElement('div'); st.className='stem';
+      st.innerHTML = `<div class="sl">${S.match(i)}</div>${q.stem}`; w.appendChild(st); lastStem=q.stem;
     }
+    const c=document.createElement('div'); c.className='qc';
+    c.innerHTML = `<div class="qt"><b>${i}.</b> ${q.q}</div>`;
+    for (let k=0;k<nOpt;k++){
+      const o=document.createElement('div'); o.className='op'; o.dataset.q=i; o.dataset.l=LET[k];
+      o.innerHTML = `<span class="L">${LET[k]}</span><span>${(q.o&&q.o[k])||''}</span>`;
+      o.onclick = ()=>choose(i, LET[k]);
+      c.appendChild(o);
+    }
+    w.appendChild(c);
   }
-  const ob = document.getElementById('open'); ob.innerHTML='';
-  document.getElementById('openWrap').style.display = m.o.length ? 'block':'none';
-  m.o.forEach(([n,parts])=>{
-    const d = document.createElement('div'); d.className='oq';
-    const qt = Q && Q[n] ? `<div class="qt"><b>${n}.</b> ${Q[n].q}</div>`
-                         : (LANG==='ru' ? `<div class="t">Вопрос ${n}</div>` : `<div class="t">${n}-savol</div>`);
-    d.innerHTML = qt + parts.map(p=>
-      `<label>${p ? p+')' : ''}<input data-k="${n}${p}" inputmode="decimal" autocomplete="off" placeholder="${S.ph}"></label>`).join('');
-    ob.appendChild(d);
-  });
-  ob.querySelectorAll('input').forEach(inp=>inp.oninput=()=>{ ans.o[inp.dataset.k]=inp.value; update(); });
-  update(); scrollTo(0,0);
-
-  if (tg){
-    tg.BackButton.show(); tg.BackButton.onClick(back);
-    tg.MainButton.setParams({text:S.finBig, color:'#5b4bdb', text_color:'#ffffff'});
-    tg.MainButton.show(); tg.MainButton.onClick(finish);
-  } else {
-    const fb = document.getElementById('fb'); fb.style.display='block'; fb.onclick=finish;
+  if (cur.o.length){
+    sec(S.open);
+    cur.o.forEach(([n])=>{
+      const q=Q[n]; const c=document.createElement('div'); c.className='qc';
+      c.innerHTML = `<div class="qt"><b>${n}.</b> ${q?q.q:''}</div><span class="gotoans">${S.toSheet}</span>`;
+      c.querySelector('.gotoans').onclick=()=>openSheet('o'+n);
+      w.appendChild(c);
+    });
+  }
+  if (wList().length){
+    sec(S.written);
+    wList().forEach(n=>{
+      const q=Q[n]; const c=document.createElement('div'); c.className='qc';
+      c.innerHTML = `<div class="qt"><b>${n}.</b> ${q?q.q:''}</div><div class="hint">${S.wHint}</div><span class="gotoans">${S.toSheet}</span>`;
+      c.querySelector('.gotoans').onclick=()=>openSheet('w'+n);
+      w.appendChild(c);
+    });
   }
 }
 
+/* ── Javob varaqasi ── */
+function renderSheet(){
+  const b = $('sbody'); b.innerHTML='';
+  const grp = (name, desc)=>{ const g=document.createElement('div'); g.className='grp'; g.innerHTML=`<b>${name}</b><span>${desc}</span>`; b.appendChild(g); };
+  const box = ()=>{ const x=document.createElement('div'); x.className='box'; b.appendChild(x); return x; };
+  const bubbleRow = (i, n, parent)=>{
+    const r=document.createElement('div'); r.className='row'+(n>4?' six':''); r.id='r'+i;
+    r.innerHTML = `<span class="n">${i}</span><div class="bub"></div>`;
+    r.querySelector('.n').onclick = ()=>{ closeSheet(); const t=document.querySelector(`.op[data-q="${i}"]`); t && t.scrollIntoView({block:'center'}); };
+    for (let k=0;k<n;k++){
+      const bb=document.createElement('button'); bb.className='bb'; bb.textContent=LET[k]; bb.dataset.q=i; bb.dataset.l=LET[k];
+      if (ans.c[i]===LET[k]) bb.classList.add('on');
+      bb.onclick=()=>choose(i, LET[k]);
+      r.querySelector('.bub').appendChild(bb);
+    }
+    parent.appendChild(r);
+  };
+  // TEST va MOSLASHTIRISH guruhlari
+  const four=[], six=[];
+  for (let i=1;i<=cur.c;i++) (((cur.ox&&cur.ox[i])||cur.op)>4 ? six : four).push(i);
+  if (four.length){ grp(S.nTest, S.gTest); const x=box(); four.forEach(i=>bubbleRow(i,(cur.ox&&cur.ox[i])||cur.op,x)); }
+  if (six.length){ grp(S.nMatch, S.gMatch); const x=box(); six.forEach(i=>bubbleRow(i,cur.ox[i],x)); }
+  // QISQA JAVOB
+  if (cur.o.length){
+    grp(S.nShort, S.gShort); const x=box();
+    cur.o.forEach(([n])=>{
+      const r=document.createElement('div'); r.className='row'; r.id='ro'+n;
+      r.innerHTML=`<span class="n">${n}</span><input class="inp" inputmode="text" autocomplete="off" placeholder="${S.ph}">`;
+      const inp=r.querySelector('input'); inp.value=ans.o[n]||'';
+      inp.oninput=()=>{ ans.o[n]=inp.value; update(); };
+      x.appendChild(r);
+    });
+  }
+  // YOZMA ISH
+  if (wList().length){
+    grp(S.nWritten, S.gWritten); const x=box();
+    wList().forEach(n=>{
+      const t=document.createElement('div'); t.className='wt'; t.id='rw'+n;
+      const draw=()=>{
+        const list=ans.w[n];
+        t.innerHTML=`<div class="wh"><b>${S.task(n)}</b><span>${S.cnt(list.length)}</span></div>`;
+        list.forEach((v,j)=>{
+          const l=document.createElement('div'); l.className='wl';
+          l.innerHTML=`<span class="tag">${PARTS[j]})</span><input class="inp" autocomplete="off" placeholder="${S.ph}">`;
+          const inp=l.querySelector('input'); inp.value=v;
+          inp.oninput=()=>{ list[j]=inp.value; update(); };
+          t.appendChild(l);
+        });
+        const pm=document.createElement('div'); pm.className='pm';
+        pm.innerHTML='<button class="plus">+</button><button class="minus">−</button>';
+        pm.querySelector('.plus').onclick=()=>{ if (list.length<PARTS.length){ list.push(''); draw(); update(); const ii=t.querySelectorAll('input'); ii[ii.length-1].focus(); } };
+        const mb=pm.querySelector('.minus'); mb.disabled = list.length<=1;
+        mb.onclick=()=>{ if (list.length>1){ list.pop(); draw(); update(); } };
+        t.appendChild(pm);
+      };
+      draw(); x.appendChild(t);
+    });
+  }
+}
+
+function openSheet(focusId){
+  $('shade').style.display='block'; $('sheet').classList.add('open');
+  if (focusId){ setTimeout(()=>{ const r=$('r'+focusId)||document.getElementById('r'+focusId); if (r){ r.scrollIntoView({block:'center'}); const i=r.querySelector('input'); i&&i.focus(); } },260); }
+}
+function closeSheet(){ $('sheet').classList.remove('open'); $('shade').style.display='none'; }
+$('sheetBar').onclick=()=>openSheet();
+$('closeSheet').onclick=closeSheet;
+$('shade').onclick=closeSheet;
+
+/* ── Taymer ── */
+function fmt(s){ const h=Math.floor(s/3600), m=Math.floor(s%3600/60), x=s%60; return (h?h+':':'')+String(m).padStart(2,'0')+':'+String(x).padStart(2,'0'); }
+function startTimer(sec){
+  clearInterval(timerId); deadline = Date.now()+sec*1000;
+  const tick=()=>{
+    const left=Math.max(0,Math.round((deadline-Date.now())/1000));
+    $('timer').textContent=S.left(fmt(left)); $('timer').classList.toggle('low', left<300);
+    if (left<=0){ clearInterval(timerId); if (!sent){ alertMsg(S.timeUp); doSend(); } }
+  };
+  tick(); timerId=setInterval(tick,1000);
+}
+
+/* ── Chiqish va yuborish ── */
 function back(){
-  const go = ()=>{
-    document.getElementById('sheet').style.display='none';
-    document.getElementById('list').style.display='block';
-    if (tg){ tg.BackButton.hide(); tg.MainButton.hide(); tg.BackButton.offClick(back); tg.MainButton.offClick(finish); }
+  const go=()=>{
+    clearInterval(timerId); closeSheet();
+    $('exam').style.display='none'; $('list').style.display='block';
+    if (tg){ tg.BackButton.hide(); tg.BackButton.offClick(back); }
   };
-  if (filled() && tg && tg.showConfirm) tg.showConfirm(S.leave, ok=>ok&&go());
-  else go();
+  if (filled()) confirmMsg(S.leave, ok=>ok&&go()); else go();
 }
+$('backBtn').onclick=back;
 
+function doSend(){
+  if (sent) return; sent = true;
+  const o={}; Object.entries(ans.o).forEach(([k,v])=>{ if(v.trim()) o[k]=v.trim(); });
+  const w={}; Object.entries(ans.w).forEach(([k,list])=>{ const l=list.map(x=>x.trim()).filter(Boolean); if (l.length) w[k]=l; });
+  const el = Math.round(((cur.tm||180)*60*1000 - Math.max(0, deadline-Date.now()))/1000);
+  const payload = JSON.stringify({mock:cur.id, c:ans.c, o, w, el});
+  if (tg && tg.sendData) tg.sendData(payload); else { alert(S.tgOnly+'\n'+payload); sent=false; }
+}
 function finish(){
-  const left = total() - filled();
-  const send = ()=>{
-    const o = {}; Object.entries(ans.o).forEach(([k,v])=>{ if(v.trim()) o[k]=v.trim(); });
-    const payload = JSON.stringify({mock:cur.id, c:ans.c, o});
-    if (tg && tg.sendData){ tg.sendData(payload); }   // bot natijani chatga yuboradi
-    else alert(S.tgOnly+'\n'+payload);
-  };
-  const msg = left>0 ? S.left(left) : S.sure;
-  if (tg && tg.showConfirm) tg.showConfirm(msg, ok=>ok&&send()); else if (confirm(msg)) send();
+  const left = total()-filled();
+  confirmMsg(left>0 ? S.leftQ(left) : S.sure, ok=>ok&&doSend());
+}
+$('finTop').onclick=finish; $('finBottom').onclick=finish;
+
+/* ── Natija oynasi («Savollar xaritasi») ── */
+function b64u(s){ s=s.replace(/-/g,'+').replace(/_/g,'/'); while(s.length%4) s+='='; return Uint8Array.from(atob(s),c=>c.charCodeAt(0)); }
+async function loadSol(id, key){
+  try{
+    const r = await fetch(new URL('s'+id+'.json?v='+Date.now(), location.href)); if (!r.ok) return null;
+    const e = await r.json();
+    const k = await crypto.subtle.importKey('raw', b64u(key), 'AES-GCM', false, ['decrypt']);
+    const pt = await crypto.subtle.decrypt({name:'AES-GCM', iv:b64u(e.iv)}, k, b64u(e.ct));
+    return JSON.parse(new TextDecoder().decode(pt));
+  }catch(err){ return null; }
+}
+function fmtT(s){ const h=Math.floor(s/3600), m=Math.floor(s%3600/60), x=s%60; return h? h+':'+String(m).padStart(2,'0')+':'+String(x).padStart(2,'0') : m+':'+String(x).padStart(2,'0'); }
+
+async function showResult(R){
+  $('list').style.display='none'; $('result').style.display='block';
+  if (tg){ tg.BackButton.hide(); tg.MainButton.hide(); }
+  const D = R.d;
+  $('rcourse').textContent = R.t; $('rtitle').textContent = S.rTitle(R.id);
+  // holatlar
+  const st = {};          // savol -> 'ok' | 'bad' | 'no'
+  let cOk=0; const nC=D.c.length;
+  for (let i=1;i<=nC;i++){ const g=D.c[i-1], k=D.k[i-1]; st[i] = g==='-' ? 'no' : (g===k ? 'ok':'bad'); if (st[i]==='ok') cOk++; }
+  let oOk=0; D.o.forEach(([n,g,r,ok])=>{ st[n] = !g ? 'no' : (ok?'ok':'bad'); oOk+=ok; });
+  let wOk=0, wTot=0; D.w.forEach(([n,g,keys,fl])=>{ const s=fl.reduce((a,b)=>a+b,0); wOk+=s; wTot+=keys.length; st[n] = !g.length ? 'no' : (s===keys.length?'ok':'bad'); });
+  const tot = nC + D.o.length + wTot, ok = cOk + oOk + wOk, pct = tot? ok/tot : 0;
+  const hasLvl = R.lv && R.lv.length<=2;
+  $('rcard').innerHTML = `<div class="lbl">${S.rRight}</div>
+    <div class="big"><b>${ok}</b><span>/ ${tot}</span></div>
+    <div class="rbar"><div style="width:${Math.max(2,pct*100)}%"></div></div>
+    <div class="motiv">${pct>=.85?S.m1:pct>=.6?S.m2:S.m3}</div>
+    <div class="tiles">
+      <div class="tile"><b>${cOk}/${nC}</b><span>${S.tTest}</span></div>
+      <div class="tile"><b>${oOk}/${D.o.length}</b><span>${S.tShort}</span></div>
+      <div class="tile"><b>${wOk}/${wTot}</b><span>${S.tW}</span></div>
+      <div class="tile"><b>${R.el?fmtT(R.el):'—'}</b><span>${S.tTime}</span></div>
+    </div>
+    <div class="lvl"><span class="t">${hasLvl?S.lvl:S.noLvl}</span><span class="v">${hasLvl?R.lv:'—'}</span>
+      <span class="s"><b>~${String(R.sc).replace('.',',')}</b><span>${S.est}</span></span></div>`;
+  $('rmapt').textContent = S.mapT;
+  $('rleg').innerHTML = `<span><i style="background:var(--mint)"></i>${S.lOk}</span><span><i style="background:#e5484d"></i>${S.lBad}</span><span><i style="background:var(--graybg)"></i>${S.lNo}</span>`;
+  const nums = Object.keys(st).map(Number).sort((a,b)=>a-b);
+  $('rdet').innerHTML = `<div class="empty">⏳</div>`;
+  const [QQ, SOL] = await Promise.all([loadQ(R.id), R.sk ? loadSol(R.id, R.sk) : Promise.resolve(null)]);
+  const map = $('rmap'); map.innerHTML='';
+  nums.forEach(n=>{ const c=document.createElement('button'); c.className='cell '+(st[n]==='ok'?'ok':st[n]==='bad'?'bad':''); c.textContent=n; c.id='c'+n; c.onclick=()=>detail(n); map.appendChild(c); });
+  const first = nums.find(n=>st[n]==='bad') || nums[0];
+  function solHtml(n){ return `<div class="solbox"><div class="sh">${S.sol}</div>${SOL ? (SOL[n]||S.solNo) : S.solNo}</div>`; }
+  function chip(s){ return `<span class="chip ${s}">${s==='ok'?S.cOk:s==='bad'?S.cBad:S.cNo}</span>`; }
+  function detail(n){
+    document.querySelectorAll('.cell.sel').forEach(x=>x.classList.remove('sel')); $('c'+n).classList.add('sel');
+    const q = QQ && QQ[n];
+    let h = `<h4>${S.qn(n)}</h4><div class="dq">${q&&q.stem?`<div class="st">${q.stem}</div>`:''}<b>${n}.</b> ${q?q.q:''}</div>`;
+    if (n<=nC){
+      const g=D.c[n-1], k=D.k[n-1], nOpt=(R.ox&&R.ox[n])||R.op||4;
+      for (let i=0;i<nOpt;i++){
+        const L=LET[i], txt=(q&&q.o&&q.o[i])||'';
+        const cls = L===k ? 'ok' : (L===g ? 'bad':'');
+        h += `<div class="dop ${cls}">${L===k?'✅ ':L===g?'❌ ':''}${L}) ${txt}</div>`;
+      }
+      h += `<div class="arrow">${g==='-'?'— → ✅ '+k : g===k?'✅ '+k : '❌ '+g+' → ✅ '+k}</div>`;
+      h += `<div class="kv"><span>${S.your}</span><span><b>${g==='-'?S.none:g}</b>${chip(st[n])}</span></div>`;
+      h += `<div class="kv"><span>${S.right}</span><b>${k}</b></div>`;
+    } else {
+      const o = D.o.find(x=>String(x[0])===String(n));
+      const w = D.w.find(x=>String(x[0])===String(n));
+      if (o){
+        h += `<div class="kv"><span>${S.your}</span><span><b>${o[1]||S.none}</b>${chip(st[n])}</span></div>`;
+        h += `<div class="kv"><span>${S.right}</span><b>${o[2]}</b></div>`;
+      } else if (w){
+        h += `<div class="kv"><span>${S.wYour}</span>${chip(st[n])}</div>`;
+        if (!w[1].length) h += `<div class="wa">${S.none}</div>`;
+        w[1].forEach((g,i)=>{ h += `<div class="wa"><span class="tag">${PARTS[i]})</span><span>${w[3][i]?'✅':'❌'} ${g}</span></div>`; });
+        h += `<div class="kv" style="margin-top:6px"><span>${S.wRight}</span></div>`;
+        w[2].forEach((k,i)=>{ h += `<div class="wa"><span class="tag">${i+1}</span><span>${k}</span></div>`; });
+      }
+    }
+    h += solHtml(n);
+    $('rdet').innerHTML = h;
+  }
+  window.detail = detail;
+  detail(first);
 }
 
-renderList();
+if (DATA.r) showResult(DATA); else renderList();
 </script>
 </body>
 </html>
