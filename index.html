@@ -518,9 +518,9 @@ function doSend(){
   const el = Math.round(((cur.tm||180)*60*1000 - Math.max(0, deadline-Date.now()))/1000);
   const data = {mock:cur.id, c:ans.c, o, w, el};
   const payload = JSON.stringify(data);
-  if (DATA.api && tg && tg.initData){
+  if (DATA.api && tg && (tg.initData || DATA.tk)){
     $('busyT').textContent = S.sending; $('busy').style.display='flex';
-    fetch(DATA.api, {method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify({initData:tg.initData, data})})
+    fetch(DATA.api, {method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify({initData:tg.initData||'', tk:DATA.tk||'', data})})
       .then(r=>r.json())
       .then(j=>{
         $('busy').style.display='none';
